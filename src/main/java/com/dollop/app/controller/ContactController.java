@@ -24,45 +24,45 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/contact/")
+@RequestMapping("/contact")
 @RequiredArgsConstructor
 public class ContactController {
 	
 	@Autowired
 	private IContactService contactService;
 	
-	@PostMapping("save/{userName}")
+	@PostMapping("/save/{userName}")
 	public ResponseEntity<Contact> addContact(@PathVariable String userName,@RequestBody Contact contact){
 		contactService.addContact(contact, userName);
 		return ResponseEntity.noContent().build();
 	}
 	
-	@GetMapping("get/{userName}")
+	@GetMapping("/get/{userName}")
 	public ResponseEntity<User> getContactByName(@PathVariable String userName){
 		return ResponseEntity.ok(contactService.getContactByName(userName));
 	}
 	
-	@PostMapping("favorite/{contId}")
+	@PostMapping("/favorite/{contId}")
 	public ResponseEntity<String> markIsFavorite(@PathVariable Integer contId){
 		return new ResponseEntity<>(contactService.markIsFavorite(contId),HttpStatus.OK);
 	}
 	
-	@GetMapping("getAllFavorites")
+	@GetMapping("/getAllFavorites")
 	public ResponseEntity<List<Contact>> getFavoriteContacts(){
 		return  ResponseEntity.ok(contactService.getFavoriteContacts());
 	}
 	
-	@PostMapping("removefavorite/{contId}")
+	@PostMapping("/removefavorite/{contId}")
 	public ResponseEntity<String> removeFavorite(@PathVariable Integer contId){
 		return new ResponseEntity<>(contactService.removeFavorite(contId),HttpStatus.OK);
 	}
 	
-	@PutMapping("update/{contName}")
+	@PutMapping("/update/{contName}")
 	public ResponseEntity<Contact> updateContact(@RequestBody Map<String, Object> contact,@PathVariable("contName") String contName){
 		return contactService.updateContact(contact, contName);
 	}
 	
-	@DeleteMapping("deleteContact/{contName}")
+	@DeleteMapping("/deleteContact/{contName}")
 	@Transactional
 	public ResponseEntity<String> deleteContact(@PathVariable("contName") String contName) {
 		return new ResponseEntity<>(contactService.deleteContact(contName),HttpStatus.OK);
@@ -83,17 +83,17 @@ public class ContactController {
         return ResponseEntity.ok(contacts);
     }
     
-    @PostMapping("setemergency/{contName}")
+    @PostMapping("/setemergency/{contName}")
 	public ResponseEntity<String> setEmergencyContacts(@PathVariable String contName){
 		return new ResponseEntity<>(contactService.setEmergencyContacts(contName),HttpStatus.OK);
 	}
     
-    @GetMapping("getAllEmergencies")
+    @GetMapping("/getAllEmergencies")
 	public ResponseEntity<List<Contact>> getEmergencyContacts(){
 		return  ResponseEntity.ok(contactService.getEmergencyContacts());
 	}
     
-    @GetMapping("allData")
+    @GetMapping("/allData")
     public ResponseEntity<PageableResponse<Contact>> getAllContactByPages(
     		@RequestParam(value = "pageNumber", defaultValue = "0", required = false) int pageNumber,
     		@RequestParam(value = "pageSize", defaultValue = "2", required = false) int pageSize,
@@ -103,4 +103,6 @@ public class ContactController {
 				return new ResponseEntity<PageableResponse<Contact>>(contactService.getAllContactsInPage(pageNumber, pageSize, sortBy, sortDir),
 						HttpStatus.OK);
     }
+    
+    
 }
